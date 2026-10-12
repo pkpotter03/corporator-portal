@@ -1,0 +1,30 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "gallery": "Gallery"
+  },
+  "home": {
+    "heroCta": "Learn More",
+    "taglineFallback": "Serving our ward with dedication"
+  },
+  "about": {
+    "title": "About",
+    "empty": "Biography coming soon."
+  },
+  "gallery": {
+    "title": "Gallery",
+    "empty": "Photos coming soon."
+  },
+  "footer": {
+    "contact": "Contact",
+    "office": "Office",
+    "phone": "Phone",
+    "email": "Email"
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "mr": "मराठी"
+  }
+}

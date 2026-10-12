@@ -1,0 +1,14 @@
+# Real resident data (names/DOB/phone/address) — stays local only, never
+# committed. The actual data lives in the Google Sheet, not in git.
+/sample
+/people-import.csv
+/scratch-*
+
+# Raw source photos (already curated into web/public/images for the site;
+# these loose working copies at the repo root don't need to be tracked).
+/WhatsApp Image*.jpeg
+/_O5A4*.jpg
+
+# OS junk
+.DS_Store
+Thumbs.db
