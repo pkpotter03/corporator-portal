@@ -9,6 +9,14 @@
 /WhatsApp Image*.jpeg
 /_O5A4*.jpg
 
+# Any JSON file dropped at the repo root — no legitimate project file lives
+# here as plain JSON, so this is almost always a downloaded Google Cloud
+# service account credential (the private key that authenticates the
+# website to the People sheet). The values that matter are already copied
+# into web/.env.local; the JSON itself should not live in the repo at all
+# (see README) and must never be committed.
+/*.json
+
 # OS junk
 .DS_Store
 Thumbs.db

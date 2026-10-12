@@ -56,17 +56,31 @@ Create a shared Drive folder for photos. To add a photo: upload it to that
 folder, right-click > Share > "Anyone with the link" > Viewer, copy the link,
 and add a row to the `Gallery` tab with that link + captions.
 
-## 2. Google Sheets API key (for the sensitive `People` data only)
+## 2. Google Sheets access for the sensitive `People` data
 
 The public site never reads `People` directly — only the staff calendar page
-does, server-side, via the Sheets API (not a published CSV, which would be an
-unauthenticated public URL for everyone's name/DOB/address).
+does, server-side, via the Sheets API. This uses a **service account**, not a
+plain API key — a bare API key has no identity of its own and can only read a
+Sheet that's shared "anyone with the link," which would defeat the point of
+keeping `People` private. A service account instead gets added to the Sheet's
+sharing list like any other collaborator.
 
 1. In [Google Cloud Console](https://console.cloud.google.com/), create a
    project (or reuse one), enable the **Google Sheets API**.
-2. Create an API key, restrict it to the Sheets API under "API restrictions".
-3. Copy the Sheet's ID from its URL
-   (`docs.google.com/spreadsheets/d/THE_ID_IS_HERE/edit`).
+2. IAM & Admin > Service Accounts > Create Service Account. Any name is fine;
+   no roles need to be granted at the project level.
+3. Open the new service account > Keys > Add Key > Create new key > **JSON**.
+   This downloads a JSON file — keep it private, it's a credential.
+4. Open the Sheet > Share, and add the service account's email (the
+   `client_email` field in that JSON, looks like
+   `name@project.iam.gserviceaccount.com`) as a **Viewer**.
+5. From the downloaded JSON, copy:
+   - `client_email` → `GOOGLE_SERVICE_ACCOUNT_EMAIL`
+   - `private_key` → `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY` (copy the whole
+     value including the `-----BEGIN/END PRIVATE KEY-----` lines and `\n`
+     sequences, exactly as it appears in the JSON, wrapped in quotes)
+6. Copy the Sheet's ID from its URL
+   (`docs.google.com/spreadsheets/d/THE_ID_IS_HERE/edit`) → `PEOPLE_SHEET_ID`.
 
 ### Staff login
 
@@ -117,8 +131,11 @@ Visit `http://localhost:3000/en` or `/mr`. The staff calendar is behind
 1. Push this repo to GitHub.
 2. Import it into [Vercel](https://vercel.com/new), set the project root to
    `web/`.
-3. Add all six env vars from `.env.local.example` in Vercel's project
-   settings.
+3. Add all seven env vars from `.env.local.example` in Vercel's project
+   settings. For `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY`, paste it exactly as
+   it is in `.env.local` (with the literal `\n` sequences) — Vercel's env
+   var editor stores it as given, and the app converts `\n` back to real
+   newlines at runtime.
 4. Deploy. Vercel's free Hobby tier covers this comfortably.
 5. Buy a domain and connect it under the Vercel project's Domains settings.
 6. Go back to the Sheet's Script Properties and fill in `STAFF_CALENDAR_URL`
